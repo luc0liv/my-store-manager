@@ -1,5 +1,5 @@
 const app = require('./app');
-const connection = require('./db/connection');
+const connection = require('./models/connection');
 
 // não altere esse arquivo, essa estrutura é necessária para à avaliação do projeto
 
