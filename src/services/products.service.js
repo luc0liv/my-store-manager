@@ -1,6 +1,5 @@
 const productsModel = require('../models/products.model');
-
-const httpErrGenerator = (status, message) => ({ status, message });
+const httpErrGenerator = require('../utils/httpErrorGenerator');
 
 const getAllProducts = async () => {
   const productsList = await productsModel.getAllProducts();
