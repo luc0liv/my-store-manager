@@ -15,6 +15,12 @@ const getProductById = async (id) => {
 };
 
 const createProduct = async (product) => {
+  if (!product) {
+    throw httpErrGenerator(400, '"name" is required');
+  }
+  if (product.length < 5) {
+    throw httpErrGenerator(422, '"name" length must be at least 5 characters long');
+  }
   const newProduct = await productsModel.createProduct({ product });
   return { id: newProduct.insertId, name: product };
 };
