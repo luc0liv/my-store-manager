@@ -21,7 +21,7 @@ const createProduct = async (product) => {
 
   const newProduct = await productsModel.createProduct({ product });
 
-  return { id: newProduct.insertId, name: product };
+  return { id: newProduct, name: product };
 };
 
 const updateProduct = async (id, productName) => {
@@ -42,7 +42,8 @@ const deleteProduct = async (id) => {
   if (!product) {
     throw httpErrGenerator(404, 'Product not found');
   }
-  await productsModel.deleteProduct(id);
+  const result = await productsModel.deleteProduct(id);
+  return result;
 };
 
 module.exports = {
