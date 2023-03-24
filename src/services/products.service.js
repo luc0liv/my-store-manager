@@ -1,5 +1,6 @@
 const productsModel = require('../models/products.model');
 const httpErrGenerator = require('../utils/httpErrorGenerator');
+const { dictionary, productsValidation } = require('../schemas/productsSchema');
 
 const getAllProducts = async () => {
   const productsList = await productsModel.getAllProducts();
@@ -15,18 +16,30 @@ const getProductById = async (id) => {
 };
 
 const createProduct = async (product) => {
-  if (!product) {
-    throw httpErrGenerator(400, '"name" is required');
-  }
-  if (product.length < 5) {
-    throw httpErrGenerator(422, '"name" length must be at least 5 characters long');
-  }
+  const { error } = productsValidation([{ name: product }]);
+  if (error) { throw httpErrGenerator(dictionary[error.details[0].type], error.message); }
+
   const newProduct = await productsModel.createProduct({ product });
+
   return { id: newProduct.insertId, name: product };
+};
+
+const updateProduct = async (id, productName) => {
+  const { error } = productsValidation([{ name: productName }]);
+  if (error) { throw httpErrGenerator(dictionary[error.details[0].type], error.message); }
+
+  const product = await productsModel.getProductById(id);
+  if (!product) {
+    throw httpErrGenerator(404, 'Product not found');
+  }
+
+  await productsModel.updateProduct(id, productName);
+  return { id, name: productName };
 };
 
 module.exports = {
   getAllProducts,
   getProductById,
   createProduct,
+  updateProduct,
 };
