@@ -37,9 +37,18 @@ const updateProduct = async (id, productName) => {
   return { id, name: productName };
 };
 
+const deleteProduct = async (id) => {
+  const product = await productsModel.getProductById(id);
+  if (!product) {
+    throw httpErrGenerator(404, 'Product not found');
+  }
+  await productsModel.deleteProduct(id);
+};
+
 module.exports = {
   getAllProducts,
   getProductById,
   createProduct,
   updateProduct,
+  deleteProduct,
 };
