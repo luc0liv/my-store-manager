@@ -22,6 +22,30 @@ describe('Testes do model de products', () => {
     expect(result).to.be.deep.equal(products[2]);
   });
 
+  it("Create product", async () => {
+    sinon.stub(connection, "execute").resolves([{ insertId: 3 }]);
+
+    const result = await productsModel.createProduct("Novo produto");
+
+    expect(result).to.be.deep.equal(3);
+  });
+
+    it("Update product", async () => {
+      sinon.stub(connection, "execute").resolves([1]);
+
+      const result = await productsModel.updateProduct(3, "Novo produto");
+
+      expect(result).to.be.deep.equal(1);
+    });
+
+    it("Delete product", async () => {
+      sinon.stub(connection, "execute").resolves([{ affectedRows: 1 }]);
+
+      const result = await productsModel.deleteProduct(2);
+
+      expect(result).to.be.deep.equal(1);
+    });
+
   afterEach(() => {
     sinon.restore();
   })
